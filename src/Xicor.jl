@@ -1,5 +1,8 @@
 module Xicor
 
-# Write your package code here.
+include("correlation.jl")
+include("rank.jl")
+
+export xicor
 
 end
