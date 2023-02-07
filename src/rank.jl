@@ -1,5 +1,6 @@
 using Random, StatsBase
 
+
 """
 A function that returns the sample ranks using maximum ranks 
 for equal values.

@@ -1,9 +1,8 @@
 using StatsBase, Distributions
-include("rank.jl");
+include("rank.jl")
 
 """
 A function that returns the Xi correlation for two vectors xvec and yvec.
-The simple kwarg can be used to output 
 """
 function calc_xi(xvec, yvec; simple::Bool=true, seed=missing)
     @assert typeof(seed) <: Integer || typeof(seed) <: Missing
@@ -29,6 +28,17 @@ end
 This function computes the xi coefficient between two vectors x and y.
 It can be used to test independence using a Monte Carlo permutation 
 test or through an asymptotic approximation test.
+Input:
+    - xvec :    A Vector of Floats, Integers, or Bools
+    - yvec :    A Vector of Floats, Integers, or Bools
+    - pvalue :  A Bool indicating whether to compute the p-value
+    - ties :    A Bool indicating whether to use ties in the calculation
+    - method :  A String indicating the method to use for the p-value
+                calculation. Options are "asymptotic" and "permutation".
+    - nperm :   An Integer indicating the number of permutations to use
+                for the permutation test.
+    - seed :    either an Integer to seed the random number generator 
+                or `missing` to use the default seed.
 """
 function xicor(xvec, yvec; 
                pvalue::Bool=false, ties::Bool=true, 
