@@ -27,18 +27,18 @@ end
 """
 This function computes the xi coefficient between two vectors x and y.
 It can be used to test independence using a Monte Carlo permutation 
-test or through an asymptotic approximation test.
-Input:
-    - xvec :    A Vector of Floats, Integers, or Bools
-    - yvec :    A Vector of Floats, Integers, or Bools
-    - pvalue :  A Bool indicating whether to compute the p-value
-    - ties :    A Bool indicating whether to use ties in the calculation
-    - method :  A String indicating the method to use for the p-value
-                calculation. Options are "asymptotic" and "permutation".
-    - nperm :   An Integer indicating the number of permutations to use
-                for the permutation test.
-    - seed :    either an Integer to seed the random number generator 
-                or `missing` to use the default seed.
+test or through an asymptotic approximation test.\n
+Input:\n
+\t- xvec :    A Vector of Floats, Integers, or Bools\n
+\t- yvec :    A Vector of Floats, Integers, or Bools\n
+\t- pvalue :  A Bool indicating whether to compute the p-value\n
+\t- ties :    A Bool indicating whether to use ties in the calculation\n
+\t- method :  A String indicating the method to use for the p-value
+                calculation. Options are "asymptotic" and "permutation".\n
+\t- nperm :   An Integer indicating the number of permutations to use
+                for the permutation test.\n
+\t- seed :    either an Integer to seed the random number generator 
+                or `missing` to use the default seed.\n
 """
 function xicor(xvec, yvec; 
                pvalue::Bool=false, ties::Bool=true, 
