@@ -93,9 +93,9 @@ function predict_direction(X, Y; alpha=0.05, method="permutation", nperm=1000)
         )
 
     if xy_p < alpha && yx_p < alpha
-        if xy_xi > yx_xi
+        if abs(xy_xi) > abs(yx_xi)
             return "X->Y"
-        elseif xy_xi < yx_xi
+        elseif abs(xy_xi) < abs(yx_xi)
             return "Y->X"
         elseif xy_sd > yx_sd
             return "X->Y"
