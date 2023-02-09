@@ -37,3 +37,34 @@ xicor(xvec, yvec; pvalue=true, method="permutation", nperm=1000)
 ```
 
 ## Application
+Due to the asymmetry of the Xi correlation coefficient, it finds an interesting application in the inference of directionality of cause-effect relationships. To test its strengths in this endeavor, we apply the coefficient on the [Tuebingen cause-effect pairs database](https://webdav.tuebingen.mpg.de/cause-effect/) described in [Mooij _et al._ (2017)](http://jmlr.org/papers/v17/14-518.html). The data can be downloaded from 
+https://webdav.tuebingen.mpg.de/cause-effect/pairs.zip, and consists of a
+number of txt files, each containing a list of cause-effect pairs and 
+description files containing information about the data sources and the 
+ground truth direction of the causal relationships.
+
+We test it here on the first pair file, which contains data from the German Weather Service on the relationship between temperature and altitude. The data is loaded in and the Xi correlation coefficient is calculated for both directions of the causal relationship. The direction with the higher Xi correlation coefficient is then chosen as the predicted direction of the causal relationship.
+
+```julia
+    # load in the data
+    pair_values = hcat(
+        [parse.(
+            Float64, 
+            [q for q in split(i, r"\s+") if q != ""]
+            ) for i in split(chomp(readchomp("./data/pair0001.txt")), "\n")
+        ]...
+        )
+    altitudes = pair_values[1, :]
+    temperatures = pair_values[2, :]
+
+    # calculate the Xi correlation coefficient for both directions
+    using Xicor
+    xy_xi, xy_sd, xy_p = xicor(altitudes, temperatures; pvalue=true)
+    yx_xi, yx_sd, yx_p = xicor(temperatures, altitudes; pvalue=true)
+    predicted_direction = xy_xi > yx_xi ? "Altitude causes temperature" : "Temperature causes altitude"
+    println("Predicted direction: $predicted_direction")
+```
+
+And it correctly predicts the direction of the causal relationship in this case.
+
+For a deeper exploration of directional inference using Xi correlation, check out the [causal direction prediction example](https://github.com/stefftaelman/Xicor.jl/tree/main/examples/causal_direction_prediction.jl).
