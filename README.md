@@ -4,7 +4,7 @@ An implementation of the Xi Correlation coefficient and hypothesis test as origi
 
 ## Installation
 
-Once the package gets added to the Julia registry, you can install it locally by
+Xicor.jl is available from the Julia registry, you can install it locally from your Julia REPL by typing:
 
 ```julia
 ] add Xicor
