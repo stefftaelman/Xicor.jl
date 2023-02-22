@@ -32,8 +32,7 @@ end
 ξ = xicor
 
 
-include("correlation.jl")
-include("rank.jl")
+include("dependence_testing.jl")
 
 export xicor, ξ
 
