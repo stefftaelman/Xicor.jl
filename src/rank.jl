@@ -2,14 +2,16 @@ using Random, StatsBase
 
 
 """
+    maxrank(x)
+
 A function that returns the sample ranks using maximum ranks 
 for equal values.
     - x : A Vector of Floats, Integers, or Bools
 """
-function maxrank(x)
+function maxrank(x::AbstractVector)
     sorted_x = sort(x)
     ranks = zeros(Int, length(x))
-    for (idx,i) in enumerate(x)
+    for (idx, i) in enumerate(x)
         ranks[idx] = findlast(isequal(i), sorted_x)
     end
     return ranks
@@ -17,6 +19,8 @@ end
 
 
 """
+    minrank(x)
+
 A function that returns the sample ranks using minimum ranks 
 for equal values.
     - x : A Vector of Floats, Integers, or Bools
@@ -24,7 +28,7 @@ for equal values.
 function minrank(x)
     sorted_x = sort(x)
     ranks = zeros(Int, length(x))
-    for (idx,i) in enumerate(x)
+    for (idx, i) in enumerate(x)
         ranks[idx] = findfirst(isequal(i), sorted_x)
     end
     return ranks
@@ -38,11 +42,8 @@ of equal values.
     - seed : either an Integer to seed the random number 
              generator or `missing` to use the default seed.
 """
-function randrank(x; seed=missing)
-    @assert typeof(seed) <: Integer || typeof(seed) <: Missing
-    if !ismissing(seed)
-        Random.seed!(seed)
-    end
+function randrank(x; seed::Union{Nothing,Integer}=nothing)
+    @assert seed isa Integer || isnothing(seed)
     sorted_x = sort(x)
     ranks = zeros(Int, length(x))
     for (idx,i) in enumerate(x)
@@ -62,9 +63,8 @@ A function that returns the sample ranks of the values in a vector.
 TO DO: the original R `rank` function has an argument that let's you choose the
        placement of the missing values.
 """
-function rank(x; ties_method::String="average", seed=missing)
+function rank(x; ties_method::String="average", seed::Union{Nothing,Integer}=missing)
     @assert ties_method ∈ ["average", "random", "max", "min"]
-    @assert typeof(seed) <: Integer || typeof(seed) <: Missing
 
     # get NA/missing
     missing_values = ismissing.(x)
