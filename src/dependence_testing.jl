@@ -22,25 +22,35 @@ function permutation_test(ξᵢ::Float64, Y::AbstractVector; n::Int=1000)
 end
 
 
-#=
-TO DO
 """ 
     asymptotic_test(xi, Y; n=1000)
 
 Computes the p-value and standard deviation of the correlation coefficient
 `xi` by an asymptotic test. 
+
+~~~THIS IS STILL BASED ON THE R IMPLEMENTATION AND NEEDS TO BE CHECKED.~~~
 """
 function asymptotic_test(ξᵢ::Float64, X::AbstractVector, Y::AbstractVector; rank=denserank)
     # intermediates depending on the tie breaks
     n = length(Y)
-    v = 
+    fr = sort(rank(Y)./n)
+    ind = 1:n
+    ind2 = 2 * n .- 2 .* ind .+ 1
+    cq = cumsum(fr)
+    m = (cq .+ (n .- ind) .* fr)/n
+    b = mean(m.^2)
+    ai = mean(ind2 .* fr .* fr)/n
+    ci = mean(ind2 .* fr)/n
+    gr = rank(-1 .* Y)./n
+    CU = mean(gr .* (1 .- gr))
+    v = (ai - 2 * b + ci^2)/(CU^2)
 
     # results
     sd = sqrt(v/n)
     pval = 1 - cdf(Normal(), sqrt(n)*ξᵢ/sqrt(v))
     return pval, sd
 end
-=#
+
 
 
 """
