@@ -34,6 +34,6 @@ end
 
 include("dependence_testing.jl")
 
-export xicor, ξ
+export xicor, ξ, test_dependence
 
 end
