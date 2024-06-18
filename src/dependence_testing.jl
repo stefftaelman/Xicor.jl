@@ -1,5 +1,5 @@
 #using Xicor
-include("../src/Xicor.jl")
+#include("../src/Xicor.jl")
 
 using Random, Distributions, StatsBase
 
