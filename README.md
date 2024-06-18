@@ -19,29 +19,26 @@ Xicor.jl allows to eaily calculate the Xi correlation coefficient between two ve
 ```julia
 xvec = rand(100)
 yvec = rand(100)
-xicor(xvec, yvec)
+xi_coeficient = ξ(xvec, yvec) # or xicor(xvec, yvec)
 ```
 
 ### Dependence testing
-Aside retrieving a correlation coefficient, Xicor.jl also allows to test for dependence between two vectors $X$ and $Y$. This is possible by using the `xicor` fucntion with the keyword argument 'pvalue' set to `true`. The function will then return a tuple of the Xi correlation coefficient, the standard deviation, and the associated p-value.
+
+Aside retrieving a correlation coefficient, Xicor.jl also allows to test for dependence between two vectors $X$ and $Y$. This is possible by using the `test_dependence` fucntion. The function will then return a tuple of the estimated p-value and standard deviation.
 
 ```julia
-xicor(xvec, yvec; pvalue=true, method="asymptotic")
+test_dependence(xi_coefficient, xvec, yvec)
 ```
 
-The `method` keyword argument allows to choose between an asymptotic approximation test and a Monte Carlo permutation 
-test. The asymptotic approximation test is based on the asymptotic normal distribution of the Xi correlation coefficient. The Monte Carlo permutation test is based on the permutation distribution of the Xi correlation coefficient. The Monte Carlo permutation test also uses a keyword argument `nperm` to specify the number of permutations to be used. The default value is 1000.
+Depending on the available number of observations either a permutation test (for <= 20 observations) or an asymptotic test will be performed. The asymptotic approximation test is based on the asymptotic normal distribution of the Xi correlation coefficient. The Monte Carlo permutation test is based on the permutation distribution of the Xi correlation coefficient. The Monte Carlo permutation test also uses a keyword argument `nperm` to specify the number of permutations to be used. The default value is 1000.
 
 ```julia
-xicor(xvec, yvec; pvalue=true, method="permutation", nperm=1000)
+test_dependence(xi_coefficient, xvec, yvec; nperm=1000)
 ```
 
 ## Application
-Due to the asymmetry of the Xi correlation coefficient, it finds an interesting application in the inference of directionality of cause-effect relationships. To test its strengths in this endeavor, we apply the coefficient on the [Tuebingen cause-effect pairs database](https://webdav.tuebingen.mpg.de/cause-effect/) described in [Mooij _et al._ (2017)](http://jmlr.org/papers/v17/14-518.html). The data can be downloaded from 
-https://webdav.tuebingen.mpg.de/cause-effect/pairs.zip, and consists of a
-number of txt files, each containing a list of cause-effect pairs and 
-description files containing information about the data sources and the 
-ground truth direction of the causal relationships.
+
+Due to the asymmetry of the Xi correlation coefficient, it finds an interesting application in the inference of directionality of cause-effect relationships. To test its strengths in this endeavor, we apply the coefficient on the [Tuebingen cause-effect pairs database](https://webdav.tuebingen.mpg.de/cause-effect/) described in [Mooij _et al._ (2017)](http://jmlr.org/papers/v17/14-518.html). The data can be downloaded from https://webdav.tuebingen.mpg.de/cause-effect/pairs.zip, and consists of a number of txt files, each containing a list of cause-effect pairs and description files containing information about the data sources and the  ground truth direction of the causal relationships.
 
 We test it here on the first pair file, which contains data from the German Weather Service on the relationship between temperature and altitude. The data is loaded in and the Xi correlation coefficient is calculated for both directions of the causal relationship. The direction with the higher Xi correlation coefficient is then chosen as the predicted direction of the causal relationship.
 
@@ -59,8 +56,8 @@ We test it here on the first pair file, which contains data from the German Weat
 
     # calculate the Xi correlation coefficient for both directions
     using Xicor
-    xy_xi, xy_sd, xy_p = xicor(altitudes, temperatures; pvalue=true)
-    yx_xi, yx_sd, yx_p = xicor(temperatures, altitudes; pvalue=true)
+    xy_xi = ξ(altitudes, temperatures)
+    yx_xi = ξ(temperatures, altitudes)
     predicted_direction = xy_xi > yx_xi ? "Altitude causes temperature" : "Temperature causes altitude"
     println("Predicted direction: $predicted_direction")
 ```
